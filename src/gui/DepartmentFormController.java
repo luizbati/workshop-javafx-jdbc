@@ -3,7 +3,9 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import db.DbException;
 import gui.listeners.DataChangeListener;
@@ -18,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Department;
+import model.exception.ValidationException;
 import model.services.DepartmentService;
 
 public class DepartmentFormController implements Initializable{
@@ -34,6 +37,8 @@ public class DepartmentFormController implements Initializable{
 	@FXML Label labelErrorName;
 	@FXML private Button btnSave;
 	@FXML private Button btnCancel;
+
+	private ResourceBundle errors;
 	
 	public void setDepartment(Department entity) {
 		this.entity = entity;
@@ -65,6 +70,9 @@ public class DepartmentFormController implements Initializable{
 		notifyDataChangeListeners();
 		Utils.currentStage(event).close();
 			
+		}
+		catch(ValidationException e) {
+			setErrorMessage(e.getErrors());
 		}
 		catch
 			(DbException e){
@@ -115,7 +123,16 @@ public class DepartmentFormController implements Initializable{
 
 
 	public void updateFormData() {
-		// TODO Auto-generated method stub
+		
+		
+	}
+	
+	private void setErrorMessage(Map<String,String>error) {
+		Set<String>fields = errors.keySet();
+		
+		if(fields.contains("name")) {
+			labelErrorName.setText(errors.getString("name"));
+		}
 		
 	}
 
