@@ -1,6 +1,7 @@
 package gui;
 
 import java.net.URL;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -21,7 +22,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.entities.Seller;
 import model.entities.seller;
 import model.services.SellerService;
 
@@ -33,10 +36,20 @@ public class SellerListController implements Initializable, DataChangeListener {
 	private TableView<seller> tableViewseller;
 
 	@FXML
-	private TableColumn<seller, Integer> tableColumnId;
+	private TableColumn<Seller, Integer> tableColumnId;
 
 	@FXML
 	private TableColumn<seller, String> tableColumnName;
+	
+	@FXML
+	private TableColumn<seller, seller> tableColumnEmail;
+	
+	@FXML
+	private TableColumn<seller, Date> tableColumnDate;
+	
+	@FXML
+	private TableColumn<seller, Double> tableColumnBaseSalary;
+	
 
 	@FXML
 	private TableColumn<seller, seller> tableColumnEDIT;
@@ -62,7 +75,21 @@ public class SellerListController implements Initializable, DataChangeListener {
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		initializeNodes();
 
+	}
+
+	private void initializeNodes() {
+		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
+		tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+		tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+		TableColumn tableColumnBirthDate;
+		tableColumnBirthDate.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
+		Utils.formatTableColumnDate(tableColumnBirthDate, "dd/MM/yyyy");
+		tableColumnBaseSalary.setCellValueFactory(new PropertyValueFactory<>("baseSalary"));
+		Utils.formatTableColumnDouble(tableColumnBaseSalary, 2);
+		
+		
 	}
 
 	public void updateView() throws IllegalAccessException {
